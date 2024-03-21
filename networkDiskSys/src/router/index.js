@@ -31,16 +31,7 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-  {
-    path: '/test/test2',
-    component: Layout,
-    children: [{
-      path: '',
-      component: () => import('@/views/test/test2'),
-      meta:{title:'聊天室'},
-      hidden: true
-    }]
-  },
+  
   {
     path: '/login',
     component: () => import('@/views/login/index'),
