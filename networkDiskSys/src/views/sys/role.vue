@@ -141,7 +141,7 @@ export default {
     clearForm() {
       this.roleForm = {};
       this.$refs.roleFormRef.clearValidate();
-      this.$refs.menuRef.setCheckKeys([]);
+      // this.$refs.menuRef.setCheckKeys([]);
     },
     openEditUI(id) {
       if (id == null) {
@@ -152,7 +152,7 @@ export default {
         //根据id查询角色数据
         roleApi.getRoleById(id).then(response => {
           this.roleForm = response.data;
-          this.$refs.menuRef.setCheckKeys(response.data.menuIdList);
+          // this.$refs.menuRef.setCheckKeys(response.data.menuIdList);
         });
       }
       this.dialogFormVisible = true;

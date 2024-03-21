@@ -1,5 +1,5 @@
 <template>
-    <div>功能点三</div>
+    <div>功能点一</div>
   </template>
   
   <script>
@@ -8,6 +8,4 @@
   }
   </script>
   
-  <style>
-  
-  </style>
+  <style></style>

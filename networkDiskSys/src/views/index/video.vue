@@ -1,5 +1,5 @@
 <template>
-    <div>功能点三</div>
+    <div>功能点二</div>
   </template>
   
   <script>
