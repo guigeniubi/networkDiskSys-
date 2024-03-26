@@ -8,7 +8,8 @@ export default {
       params: {
         pageNo: searchModel.pageNo,
         pageSize: searchModel.pageSize,
-        roleName: searchModel.roleName,
+        fileName: searchModel.fileName,
+        type:searchModel.type
       },
     });
   },
@@ -26,11 +27,11 @@ export default {
       method: "get",
     });
   },
-  updateRole(role) {
+  updateFile(file) {
     return request({
-      url: "/role",
+      url: "/file",
       method: "put",
-      data: role,
+      data: file,
     });
   },
   saveRole(role) {
@@ -39,9 +40,9 @@ export default {
     }
     return this.updateRole(role);
   },
-  deleteRoleByID(id) {
+  deleteFileByID(id) {
     return request({
-      url: `/role/${id}`,
+      url: `/file/${id}`,
       method: "delete",
     });
   },

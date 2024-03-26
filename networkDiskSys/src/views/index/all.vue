@@ -4,10 +4,10 @@
     <el-card id="search">
       <el-row><!--24分-->
         <el-col :span="4">
-          <el-button type="primary">上传<i class="el-icon-upload el-icon--right"></i></el-button></el-col>
+          <el-button type="primary"  @click="openUploadDialog">上传<i class="el-icon-upload el-icon--right"></i></el-button></el-col>
         <el-col :span="20" align="right">
-          <el-input v-model="searchModel.roleName" placeholder="文件名" clearable></el-input>
-          <el-button @click='getRoleList' type="primary" round icon="el-icon-search">查询</el-button></el-col>
+          <el-input v-model="searchModel.fileName" placeholder="文件名" clearable></el-input>
+          <el-button @click='getFileList' type="primary" round icon="el-icon-search">查询</el-button></el-col>
 
       </el-row>
     </el-card>
@@ -15,7 +15,7 @@
 
     <!--结果列表-->
     <el-card>
-      <el-table :data="roleList" stripe style="width: 100%">
+      <el-table :data="fileList" stripe style="width: 100%">
         <el-table-column label="#" width="80">
           <template slot-scope="scope">
             <!-- (pageNo-1)*pageSize+index+1 -->
@@ -25,11 +25,11 @@
         </el-table-column>
         <!-- <el-table-column prop="roleId" label="角色ID" width="200">
         </el-table-column> -->
-        <el-table-column prop="roleName" label="文件名" width="260">
+        <el-table-column prop="fileName" label="文件名" width="260">
         </el-table-column>
-        <el-table-column prop="roleDesc" label="修改时间">
+        <el-table-column prop="updateTime" label="修改时间">
         </el-table-column>
-        <el-table-column prop="roleDesc" label="大小">
+        <el-table-column prop="fileSize" label="大小">
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
@@ -69,13 +69,20 @@
       </div>
     </el-dialog>
   </div>
+
+  <!-- <Upload ref="uploadComponent">asd</Upload> -->
 </template>
 
 <script>
 import fileApi from '@/api/file'
 import roleApi from '@/api/roleManager'
 import menuApi from '@/api/menuManger'
+import Upload from '@/components/Upload/upload.vue'
+
 export default {
+  components: {
+    Upload // 注册上传组件
+  },
   data() {
     return {
       menuList: [],
@@ -90,9 +97,10 @@ export default {
       total: 0,
       searchModel: {
         pageNo: 1,
-        pageSize: 10
+        pageSize: 10,
+        type:"all"
       },
-      roleList: [],
+      fileList: [],
       rules: {
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' },
@@ -113,9 +121,9 @@ export default {
       });
     }
     ,
-    getRoleList() {
-      roleApi.getRoleList(this.searchModel).then(response => {
-        this.roleList = response.data.rows;
+    getFileList() {
+      fileApi.getFileList(this.searchModel).then(response => {
+        this.fileList = response.data.rows;
         this.total = response.data.total;
       });
 
@@ -134,7 +142,7 @@ export default {
               type: 'success'
             });
             this.dialogFormVisible = false;
-            this.getRoleList();
+            this.getFileList();
 
           });
         }
@@ -166,11 +174,11 @@ export default {
 
     handleSizeChange(pageSize) {
       this.searchModel.pageSize = pageSize;
-      this.getRoleList();
+      this.getFileList();
     },
     handleCurrentChange(pageNo) {
       this.searchModel.pageNo = pageNo;
-      this.getRoleList();
+      this.getFileList();
     },
     deleteRole(role) {
       this.$confirm(`您确认删除用户${role.roleName}?`, '此操作将永久删除该文件, 是否继续?', '提示', {
@@ -183,7 +191,7 @@ export default {
         //     type: 'success',
         //     message: response.message
         //   });
-        //   this.getRoleList()
+        //   this.getFileList()
         // })
       }).catch(() => {
         this.$message({
@@ -191,12 +199,14 @@ export default {
           message: '已取消删除!'
         });
       });
+    },
+    openUploadDialog() {
+      this.$refs.uploadComponent.openDialog();
     }
-
 
   },
   created() {
-    this.getRoleList();
+    this.getFileList();
     this.getAllMenu();
   },
 
