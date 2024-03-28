@@ -23,20 +23,21 @@
           </template>
           9
         </el-table-column>
-        <!-- <el-table-column prop="roleId" label="角色ID" width="200">
-        </el-table-column> -->
+
         <el-table-column prop="fileName" label="文件名" width="260">
         </el-table-column>
+        
         <el-table-column prop="updateTime" label="修改时间">
         </el-table-column>
         <el-table-column prop="fileSize" label="大小">
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="scope">
-            <el-button @click="openEditUI(scope.row.roleId)" type="primary" icon="el-icon-edit" size="mini"
+            <el-button @click="rename(scope.row.fileId)" type="primary" icon="el-icon-edit" size="mini"
               circle></el-button>
               <el-button type="primary" icon="el-icon-share" size="mini" circle></el-button>
-            <el-button @click="deleteRole(scope.row)" type="danger" icon="el-icon-delete" size="mini"
+              <el-button type="primary" icon="el-icon-download" size="mini" circle></el-button>
+            <el-button @click="deleteFile(scope.row)" type="danger" icon="el-icon-delete" size="mini"
               circle></el-button>
             
           </template>
@@ -49,25 +50,7 @@
       layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 
-    <!-- 上传 -->
-    <el-dialog @close='clearForm' :title="title" :visible.sync="dialogFormVisible">
-      <el-form :model="roleForm" ref="roleFormRef" :rules="rules">
-        <el-form-item label="角色名称" prop="roleName" :label-width="formLabelWidth">
-          <el-input v-model="roleForm.roleName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="角色描述" prop="roleDesc" :label-width="formLabelWidth">
-          <el-input v-model="roleForm.roleDesc" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="权限设置" prop="menuIdList" :label-width="formLabelWidth">
-          <el-tree :data="menuList" :props="menuProps" show-checkbox default-expand-all node-key="menuId" ref="menuRef"
-            style="width:85%"></el-tree>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveRole">确 定</el-button>
-      </div>
-    </el-dialog>
+   
   </div>
 
   <!-- <Upload ref="uploadComponent">asd</Upload> -->
@@ -157,19 +140,8 @@ export default {
       this.$refs.roleFormRef.clearValidate();
       // this.$refs.menuRef.setCheckKeys([]);
     },
-    openEditUI(id) {
-      if (id == null) {
-        this.title = '新增角色';
-      }
-      else {
-        this.title = '修改角色';
-        //根据id查询角色数据
-        roleApi.getRoleById(id).then(response => {
-          this.roleForm = response.data;
-          // this.$refs.menuRef.setCheckKeys(response.data.menuIdList);
-        });
-      }
-      this.dialogFormVisible = true;
+    rename(fileId) {
+      
     },
 
     handleSizeChange(pageSize) {
@@ -180,8 +152,8 @@ export default {
       this.searchModel.pageNo = pageNo;
       this.getFileList();
     },
-    deleteRole(role) {
-      this.$confirm(`您确认删除用户${role.roleName}?`, '此操作将永久删除该文件, 是否继续?', '提示', {
+    deleteFile(file) {
+      this.$confirm(`您确认删除文件${file.fileName}?`, '此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

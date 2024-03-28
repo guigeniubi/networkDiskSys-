@@ -9,9 +9,17 @@ export default {
         pageNo: searchModel.pageNo,
         pageSize: searchModel.pageSize,
         fileName: searchModel.fileName,
-        type:searchModel.type
+        type: searchModel.type
       },
     });
+  },
+  postChunks(formData) {
+    return request({
+      url: '/single3',
+      method: 'post',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData
+    })
   },
   addRole(role) {
     return request({
@@ -19,6 +27,14 @@ export default {
       method: "post",
       data: role,
     });
+  },
+  merge(hash) {
+    return request({
+      url: '/merge',
+      method: 'get',
+      params: { hash: hash }
+    })
+
   },
   getRoleById(id) {
     return request({
